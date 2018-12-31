@@ -111,11 +111,6 @@ bool sendlong(SOCKET sock, long& value)
 	return senddata(sock, &value, sizeof(value));
 }
 
-bool sendString(SOCKET sock, string& value)
-{
-	return senddata(sock, &value, sizeof(value));
-}
-
 bool sendfile(SOCKET sock, FILE *f, string& fileName)
 {
 	fseek(f, 0, SEEK_END);
@@ -125,8 +120,6 @@ bool sendfile(SOCKET sock, FILE *f, string& fileName)
 		return false;
 	if (!sendlong(sock, filesize))
 		return false;
-	/*if (!sendString(sock, fileName))
-		return false;*/
 	if (filesize > 0)
 	{
 		char buffer[1024];
@@ -150,7 +143,8 @@ string sendFileCommand(vector<string> params,SOCKET &sock)
 	FILE *filehandle = fopen(params[0].c_str(), "rb");
 	if (filehandle != NULL)
 	{
-		sendMessageToSocket("SENDING_FILE", sock);
+		string toSend = "SENDING_FILE " + params[0];
+		sendMessageToSocket(toSend, sock);
 		sendfile(sock, filehandle, params[0]);
 		fclose(filehandle);
 		return "File Sent successfully";

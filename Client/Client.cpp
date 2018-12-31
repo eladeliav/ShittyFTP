@@ -44,13 +44,17 @@ int main()
 			string outStr = string(Buf, 0, bytesReceived);
 			std::cout << outStr << std::endl;
 			std::cout << "> ";
-			if (outStr == "SENDING_FILE")
+			if (outStr.find("SENDING_FILE") != string::npos)
 			{
-				/*string fileName = "";
-				if (!readString(connectSocket, fileName))
-					continue;
-				std::cout << "received file name" << fileName << std::endl;*/
-				FILE *filehandle = fopen("imageFile.jpg", "wb");
+				string basename = outStr;
+				if (outStr.find('\\') != string::npos)
+					basename = basename.substr(outStr.rfind('\\') + 1);
+				else
+					basename = outStr.substr(outStr.find(' ') + 1);
+
+				string fileName = "received_" + basename;
+				//std::cout << "extracted file name " << fileName << std::endl;
+				FILE *filehandle = fopen(fileName.c_str(), "wb");
 				if (filehandle != NULL)
 				{
 					bool ok = readfile(connectSocket, filehandle);
@@ -93,13 +97,6 @@ bool readdata(SOCKET &sock, void* buf, int buflen)
 }
 
 bool readlong(SOCKET& sock, long& value)
-{
-	if (!readdata(sock, &value, sizeof(value)))
-		return false;
-	return true;
-}
-
-bool readString(SOCKET& sock, string value)
 {
 	if (!readdata(sock, &value, sizeof(value)))
 		return false;
@@ -253,7 +250,7 @@ void sendMessageToSocket(string message, SOCKET &sock)
 	string command;
 	vector<string> params;
 	splitRequestAndParams(message, command, params);
-	std::cout << "deteceted command " << command << std::endl;
+//	std::cout << "deteceted command " << command << std::endl;
 	int sendStatus = send(sock, message.c_str(), (int)message.size(), 0);
 }
 

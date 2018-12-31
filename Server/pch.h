@@ -47,7 +47,6 @@ bool senddata(SOCKET sock, void *buf, int buflen);
 bool sendlong(SOCKET sock, long& value);
 bool sendfile(SOCKET sock, FILE *f, string& fileName);
 string sendFileCommand(vector<string> params,SOCKET &sock);
-bool sendString(SOCKET sock, string& value);
 
 void handleClientRequest(SOCKET &sock, fd_set &master, char *Buf);
 
