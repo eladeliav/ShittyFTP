@@ -14,7 +14,7 @@
 #include <gdiplus.h>
 #include <experimental/filesystem>
 //using vector and string
-
+#include <boost/algorithm/string/case_conv.hpp>
 //using winsock and gdiplus libs
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment (lib, "Ws2_32.lib")

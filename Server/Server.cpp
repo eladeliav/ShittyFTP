@@ -10,28 +10,28 @@ typedef std::string(*simpleCommandPtr)(vector<string>); //typedef for function p
 typedef std::string(*socketCommandPtr)(vector<string>,SOCKET&); //typedef for function pointer x(vector<string>, SOCKET)
 const std::map<string, simpleCommandPtr> COMMAND_MAP = 
 {
-	{"ping", &pong},
-	{"server_shutdown", &shutdown_server},
-	{"add", &additionCommand},
-	{"take_screenshot", &take_screenshot},
-	{"dir", &directoryCommand},
-	{"delete", &deleteFileCommand},
+	{"PING", &pong},
+	{"SERVER_SHUTDOWN", &shutdown_server},
+	{"ADD", &additionCommand},
+	{"TAKE_SCREENSHOT", &take_screenshot},
+	{"DIR", &directoryCommand},
+	{"DELETE", &deleteFileCommand},
 };
 
 const std::map<string, socketCommandPtr> SOCKET_COMMAND_MAP =
 {
-	{"send_file", &sendFileCommand}
+	{"SEND_FILE", &sendFileCommand}
 };
 
 const std::map<string, int> NUM_OF_PARAMS = 
 {
-	{"ping", 0},
-	{"server_shutdown", 0},
-	{"add", 2},
-	{"take_screenshot", 0},
-	{"send_file", 1},
-	{"dir", 1},
-	{"delete", 1},
+	{"PING", 0},
+	{"SERVER_SHUTDOWN", 0},
+	{"ADD", 2},
+	{"TAKE_SCREENSHOT", 0},
+	{"SEND_FILE", 1},
+	{"DIR", 1},
+	{"DELETE", 1},
 };
 
 int main()
@@ -175,7 +175,8 @@ void handleClientRequest(SOCKET &sock, fd_set &master, char *Buf)
 		string command = commandAndParams;
 		vector<string> paramsVector;
 		splitRequestAndParams(commandAndParams, command, paramsVector);
-
+		boost::algorithm::to_upper(command);
+		std::cout << "Extracted Command: " << command << std::endl;
 		auto mapPair = COMMAND_MAP.find(command);
 		auto numOfParamsPair = NUM_OF_PARAMS.find(command);
 		auto socketMapPair = SOCKET_COMMAND_MAP.find(command);

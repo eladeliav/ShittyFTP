@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <boost/algorithm/string/case_conv.hpp>
 #pragma comment (lib, "Ws2_32.lib")
 using std::string;
 using std::vector;

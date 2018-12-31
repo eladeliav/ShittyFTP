@@ -138,8 +138,10 @@ void sendMessages(SOCKET &sock, std::string &userInput)
 		std::cin >> std::ws;
 		std::getline(std::cin, userInput, '\n');
 
-		std::string shutdownServerMessage = "server_shutdown";
-		std::string shutdownClientMessage = "exit";
+		boost::algorithm::to_upper(userInput);
+		std::string shutdownServerMessage = "SERVER_SHUTDOWN";
+		std::string shutdownClientMessage = "EXIT";
+
 		if (userInput == shutdownServerMessage)
 		{
 			//sending the command
