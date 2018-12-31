@@ -2,6 +2,8 @@
 #include "CommandFunctions.h"
 #pragma warning(disable : 4996) //disable "unsafe function" warning
 
+namespace fs = std::experimental::filesystem;
+
 int GetEncoderClsid(const wchar_t *format, CLSID *pClsid)
 {
 	using namespace Gdiplus;
@@ -156,6 +158,44 @@ string additionCommand(vector<string> params)
 	int a = std::stoi(params[0]);
 	int b = std::stoi(params[1]);
 	return std::to_string(a + b);
+}
+
+string directoryCommand(vector<string> params)
+{
+	string path = params[0];
+	if (!dirExists(path))
+		return "Directory not found";
+	string toReturn = "\r\n";
+	for (const auto & entry : fs::directory_iterator(path))
+	{
+		toReturn += entry.path().string() + "\r\n";
+	}
+	return toReturn;
+}
+
+bool dirExists(const std::string& dirName_in)
+{
+	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		return false;  //something is wrong with your path!
+
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;   // this is a directory!
+
+	return false;    // this is not a directory!
+}
+
+string deleteFileCommand(vector<string> params)
+{
+	FILE *filehandle = fopen(params[0].c_str(), "rb");
+	if (filehandle == NULL)
+	{
+		return "File Not Found";
+	}
+	fclose(filehandle);
+	if(remove(params[0].c_str()) != 0)
+		return "Error deleting file";
+	return "File deleted";
 }
 
 void splitRequestAndParams(string commandAndParams, string &command, vector<string> &paramsVector)

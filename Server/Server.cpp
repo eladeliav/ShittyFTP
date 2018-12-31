@@ -14,6 +14,8 @@ const std::map<string, simpleCommandPtr> COMMAND_MAP =
 	{"server_shutdown", &shutdown_server},
 	{"add", &additionCommand},
 	{"take_screenshot", &take_screenshot},
+	{"dir", &directoryCommand},
+	{"delete", &deleteFileCommand},
 };
 
 const std::map<string, socketCommandPtr> SOCKET_COMMAND_MAP =
@@ -27,7 +29,9 @@ const std::map<string, int> NUM_OF_PARAMS =
 	{"server_shutdown", 0},
 	{"add", 2},
 	{"take_screenshot", 0},
-	{"send_file", 1}
+	{"send_file", 1},
+	{"dir", 1},
+	{"delete", 1},
 };
 
 int main()
